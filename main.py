@@ -3,7 +3,6 @@
 
 import tkinter as tk
 from tkinter import ttk
-from PIL import ImageTk, Image
 import random
 
 import os.path
@@ -83,14 +82,11 @@ root.geometry("702x686+"+sposx+"+"+sposy)
 root.config(padx=3,pady=3)
 root.resizable(0,0)
 
-image1 = Image.open("imagetest.png")
-bgi = ImageTk.PhotoImage(image1)
-
 ########
 # vars #
 ########
 
-word = "SOTTH"
+word = ""
 errormessage = ""
 corrLetters = []
 alcorrLetters = []

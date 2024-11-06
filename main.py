@@ -116,7 +116,7 @@ hardMode = tk.IntVar()
 ###############
 
 def updateTheme():
-    fl = themeSetDropdown.get()
+    fl = themeSetDropdown.get() + ".the"
     if fl:
         try:
             f = open("themes/"+fl)
@@ -492,7 +492,8 @@ def setTheme():
 def updateThemesList(*args):
     themesindir = []
     for i in os.listdir("./themes/"):
-        themesindir.append(i)
+        if i[-4:] == ".the":
+            themesindir.append(i[:-4])
     
     themeSetDropdown['values']=themesindir
 

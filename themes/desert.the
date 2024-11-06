@@ -1,27 +1,30 @@
 --- in order, theme files have the following colors:
 --- general: foreground, background, active background (buttons)
 
-aaffff
-202020
-353535
+--- 50501d
+0f0f00
+--- c3c35f
+c3b35f
+a3a33f
 
 --- guess list: correct, almost correct, incorrect
 
-00ff00
-ffff00
-aaffff
+00ee44
+--- ffdd00
+efed00
+0f0f00
 
 --- console: foreground, background
 
-aaffff
-202020
+0f0f00
+f0f0a0
 
 --- keyboard: default text color, correct, almost correct, incorrect, background
 
-aaffff
+f0f060
 00ff00
 ffff00
-115555
-000000
+555535
+0f0f40
 
 --- do not put #s before the colors

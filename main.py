@@ -7,7 +7,7 @@ import random
 
 import os.path
 import configparser
-from colors import addToHex
+from colors import makeDisabledColor
 
 ################
 # config setup #
@@ -154,6 +154,10 @@ def updateTheme():
 def resetVars():
     #idk if i should set these to global here but whatever
     hardModeButton['state'] = 'normal'
+    maxGuessesDropdown['state'] = 'readonly'
+    maxGuessesButton['state'] = 'normal'
+    hardModeButton.config(cursor="hand2")
+    maxGuessesButton.config(cursor="hand2")
     
     global wordlength
     wordlength = int(config.get('VARS', 'wordsize'))
@@ -349,6 +353,10 @@ def submitWord():
         if text.isalpha():
             if text in lnFull or text in ln: # there may be words in legalWords.txt that are not in words.txt
                 hardModeButton['state'] = 'disabled'
+                maxGuessesDropdown['state'] = 'disabled'
+                maxGuessesButton['state'] = 'disabled'
+                hardModeButton.config(cursor="arrow")
+                maxGuessesButton.config(cursor="arrow")
 
                 if config.getboolean('VARS', 'hardmode') == False or prevGuess == "":
                     compareWord(text)
@@ -388,24 +396,25 @@ def hardModeToggle():
     if config.getboolean('VARS','hardmode'):
         log("Hard mode disabled.")
         config.set('VARS','hardmode', "0")
-        hardModeButton.config(relief="raised")
+        hardModeButton.config(relief="raised", background=bgc)
     else:
         log("Hard mode enabled.")
         config.set('VARS','hardmode', "1")
-        hardModeButton.config(relief="sunken")
+        hardModeButton.config(relief="sunken", background=abgc)
 
     with open('config.ini', 'w') as configfile:
         config.write(configfile)
     errortxt.see(tk.END)
 
 def setTheme():
-    
+    global bgc
+    global abgc
     bgc = config.get('COLORS', "bg")
     abgc = config.get('COLORS', "abg")#addToHex(bgc, -20, -20, -20)#config.get('COLORS', "abg")#
-    dbgc = addToHex(bgc, +20, +20, +20)
+    dbgc = makeDisabledColor(bgc, +60, +60, +60)
     fgc = config.get('COLORS', "fg")
-    afgc = addToHex(fgc, -20, -20, -20)
-    dfgc = addToHex(fgc, -40, 40, -40)
+    afgc = makeDisabledColor(fgc, -20, -20, -20)
+    dfgc = makeDisabledColor(fgc, 60, 60, 60)#addToHex(fgc, -40, 40, -40)
 
     glc = config.get('COLORS', "glc")
     gla = config.get('COLORS', "gla")
@@ -432,20 +441,6 @@ def setTheme():
     hardModeButton.config(background=bgc, activebackground=abgc, foreground=fgc, activeforeground=afgc, disabledforeground=dfgc)
 
     themeSetButton.config(background=bgc, activebackground=abgc, foreground=fgc, activeforeground=afgc, disabledforeground=fgc)
-
-    # themeSetEntry.config(background=bgc, foreground=fgc, disabledbackground=dbgc, disabledforeground=dfgc)
-
-    # tsds.theme_settings('combostyle', settings={'TCombobox': {'configure': {
-    #                                                                         'foreground':fgc,
-    #                                                                         'relief':'flat',
-    #                                                                         'padding':'flat',
-    #                                                                         'selectforeground':fgc,
-    #                                                                         'selectbackground':bgc,
-    #                                                                         'fieldbackground':bgc,
-    #                                                                         'background':abgc,
-    #                                                                         'arrowcolor':fgc,
-    #                                                                         'padding':2,
-    #                                                                         }}})
     
     #https://tkdocs.com/shipman/ttk-map.html
     #at some point i'd like to be able to set the relief of all of the combobox elements but whatever ig
@@ -472,11 +467,10 @@ def setTheme():
     keyboard.tag_config('incorrect', foreground=kbi)
     keyboard.tag_config('def', foreground=kbd)
 
-    # ll.config(background=bgc, foreground=fgc)
-
     lframe.config(background=bgc)
 
-    guessLabel.config(background=bgc, foreground=fgc)
+    #guessLabel.config(background=bgc, foreground=fgc)
+    maxGuessesButton.config(background=bgc, activebackground=abgc, foreground=fgc, activeforeground=afgc, disabledforeground=dfgc)
 
     entry.config(background=bgc, foreground=fgc, disabledbackground=dbgc, disabledforeground=dfgc)
 
@@ -484,9 +478,9 @@ def setTheme():
 
 
     if config.getboolean('VARS','hardmode'):
-        hardModeButton.config(relief="sunken")
+        hardModeButton.config(relief="sunken", background=abgc)
     else:
-        hardModeButton.config(relief="raised")
+        hardModeButton.config(relief="raised", background=bgc)
     updateThemesList()
     
 def updateThemesList(*args):
@@ -497,6 +491,13 @@ def updateThemesList(*args):
     
     themeSetDropdown['values']=themesindir
 
+def updateMaxGuesses(*args):
+    config.set('VARS','maxguesses', maxGuessesDropdown.get())
+
+    with open('config.ini', 'w') as configfile:
+        config.write(configfile)
+    
+    log("Max guesses set to "+config.get('VARS', 'maxguesses')+".")
 
 
 
@@ -544,9 +545,6 @@ themeSetButton = tk.Button(uframe)
 themeSetButton.place(relx=.9, rely=.5, relwidth=.18, anchor='center')
 themeSetButton.config(text="Set Theme", font="Consolas 16 bold", relief='raised', command=updateTheme, cursor='hand2')
 
-# themeSetEntry = tk.Entry(uframe)
-# themeSetEntry.place(relx=.9, rely=.7, relwidth=.18, anchor='center')
-# themeSetEntry.config(font='Consolas 12')
 
 test = ["a", "b", "c", "d"]
 
@@ -561,25 +559,29 @@ tsds = ttk.Style()
 #                                        'background': 'green'
 #                                        }}}
 #                          )
-tsds.theme_create('combostyle')#, settings={'TCombobox': {'configure': {'fieldbackground':'red'}}})
-#tsds.configure('combostyle', background='green')
+tsds.theme_create('combostyle')
 tsds.theme_use('combostyle')
-#print(tsds.theme_names())
 
 themeSetDropdown = ttk.Combobox(uframe, values=test, state='readonly')
-themeSetDropdown.place(relx=.9, rely=.6, relwidth=.18, relheight= .08, anchor='center')
-# themeSetDropdown.config(command=updateThemesList)
+themeSetDropdown.place(relx=.9, rely=.6, relwidth=.18, relheight= .09, anchor='center')
+themeSetDropdown.set(config.get('VARS', 'theme')[:-4])
 themeSetDropdown.bind('<FocusIn>', updateThemesList)
 themeSetDropdown.config(font='Consolas 12')
-# print(themeSetDropdown.winfo_class())
-# print(tsds.layout('TCombobox'))
-# print(tsds.element_options('Combobox.field'))
-# print(tsds.element_options('Combobox.downarrow'))
-# print(tsds.element_options('Combobox.padding'))
-# print(tsds.element_options('Combobox.textarea'))
-guessLabel = tk.Label(uframe)
-guessLabel.place(relx=0.01, rely=.7, anchor='w')
-guessLabel.config(text="Max guesses: " + config.get('VARS', 'maxguesses'), font="Consolas 14 bold")
+
+# guessLabel = tk.Label(uframe)
+# guessLabel.place(relx=0.01, rely=.7, anchor='w')
+# guessLabel.config(text="Max guesses: " + config.get('VARS', 'maxguesses'), font="Consolas 14 bold")
+maxGuessesButton = tk.Button(uframe)
+maxGuessesButton.place(relx=.07, rely=.6, relwidth=.12, relheight= .09, anchor='center')
+maxGuessesButton.config(text="Set max\nguesses", font="Consolas 10 bold", relief='raised', command=updateMaxGuesses, cursor='hand2')
+mgv = tk.IntVar()
+nl = [i for i in range(1,21)]
+#nl.append("infinite")
+maxGuessesDropdown = ttk.Combobox(uframe, values=nl, state='readonly')
+maxGuessesDropdown.set(config.get('VARS', 'maxguesses'))
+maxGuessesDropdown.place(relx=.165, rely=.6, relwidth=.05, relheight= .09, anchor='center')
+maxGuessesDropdown.config(font="Consolas 11 bold")
+# command=updateMaxGuesses
 
 ######################################
 # middle frame; keys/error reporting #

@@ -22,7 +22,7 @@ def configInit():
         config['VARS'] = {"wordsize":5,
                           "maxguesses":6,
                           "hardmode":False,
-                          "theme":"default"}
+                          "theme":"default.the"}
         config['COLORS'] = {"fg":"#000000",
                             "bg":"#f0f0f0",
                             "abg":"#fafafa",
@@ -36,7 +36,7 @@ def configInit():
                             "kba":"#ffff00",
                             "kbi":"#555555",
                             "kbbg":"#000000",
-                            "theme":"default"}
+                            "theme":"default.the"}
         with open('config.ini', 'w') as configfile:
             config.write(configfile)
     try:
@@ -413,7 +413,7 @@ def setTheme():
     abgc = config.get('COLORS', "abg")#addToHex(bgc, -20, -20, -20)#config.get('COLORS', "abg")#
     dbgc = makeDisabledColor(bgc, +60, +60, +60)
     fgc = config.get('COLORS', "fg")
-    afgc = makeDisabledColor(fgc, -20, -20, -20)
+    afgc = makeDisabledColor(fgc, 20, 20, 20)
     dfgc = makeDisabledColor(fgc, 60, 60, 60)#addToHex(fgc, -40, 40, -40)
 
     glc = config.get('COLORS', "glc")
@@ -498,6 +498,7 @@ def updateMaxGuesses(*args):
         config.write(configfile)
     
     log("Max guesses set to "+config.get('VARS', 'maxguesses')+".")
+    errortxt.see(tk.END)
 
 
 
@@ -572,14 +573,14 @@ themeSetDropdown.config(font='Consolas 12')
 # guessLabel.place(relx=0.01, rely=.7, anchor='w')
 # guessLabel.config(text="Max guesses: " + config.get('VARS', 'maxguesses'), font="Consolas 14 bold")
 maxGuessesButton = tk.Button(uframe)
-maxGuessesButton.place(relx=.07, rely=.6, relwidth=.12, relheight= .09, anchor='center')
+maxGuessesButton.place(relx=.065, rely=.6, relwidth=.11, relheight= .09, anchor='center')
 maxGuessesButton.config(text="Set max\nguesses", font="Consolas 10 bold", relief='raised', command=updateMaxGuesses, cursor='hand2')
 mgv = tk.IntVar()
 nl = [i for i in range(1,21)]
 #nl.append("infinite")
 maxGuessesDropdown = ttk.Combobox(uframe, values=nl, state='readonly')
 maxGuessesDropdown.set(config.get('VARS', 'maxguesses'))
-maxGuessesDropdown.place(relx=.165, rely=.6, relwidth=.05, relheight= .09, anchor='center')
+maxGuessesDropdown.place(relx=.16, rely=.6, relwidth=.06, relheight= .09, anchor='center')
 maxGuessesDropdown.config(font="Consolas 11 bold")
 # command=updateMaxGuesses
 

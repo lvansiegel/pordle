@@ -1,6 +1,6 @@
 # hi
 - this is a python recreation of the famous word game "wordle"
-- it uses the tkinter and configparser packages
+- it uses the tkinter and configparser packages, and is built using pyinstaller
 - includes themes!
 
 # future goals

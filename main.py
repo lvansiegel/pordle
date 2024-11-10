@@ -5,7 +5,7 @@ import tkinter as tk
 from tkinter import ttk
 import random
 
-import os.path
+import os
 import configparser
 from colors import makeDisabledColor
 
@@ -98,14 +98,25 @@ correct = False
 guesses = 0
 maxguesses = int(config.get('VARS', 'maxguesses'))+1
 
-f = open("words/legalwords{}.txt".format(wordlength))
-ln = [i[:5].upper() for i in f.readlines()]
-f.close()
+try:
+    f = open("words/legalwords{}.txt".format(wordlength))
+    ln = [i[:5].upper() for i in f.readlines()]
+    f.close()
 
-f = open("words/words{}.txt".format(wordlength))
-lnFull = [i[:5].upper() for i in f.readlines()]
-f.close()
+    f = open("words/words{}.txt".format(wordlength))
+    lnFull = [i[:5].upper() for i in f.readlines()]
+    f.close()
+except Exception as e:
+    print(e, "\nMake sure the ./words/ directory contains legalwords{}.txt and words{}.txt, or delete the config file.".format(wordlength, wordlength))
+    os.system('pause')
+    exit()
 
+if not os.path.exists('./themes/'):
+    print("no themes directory found. creating...")
+    os.makedirs(os.curdir+'\\themes')
+    f = open(os.path.realpath(os.curdir)+'\\themes\\default.the', 'w+')
+    f.write("--- in order, theme files have the following colors:\n--- general: foreground, background, active background (buttons)\n\n000000\nf0f0f0\nececec\n\n--- guess list: correct, almost correct, incorrect\n\n00aa00\nedcd33\naaaaaa\n\n--- console: foreground, background\n\naa0000\nc0c0c0\n\n--- keyboard: default text color, correct, almost correct, incorrect, background\n\nffffff\n00ff00\nffff00\n555555\n000000\n\n--- do not put #s before the colors")
+    f.close()
 
 prevGuess = ""
 
@@ -122,7 +133,7 @@ def updateTheme():
             f = open("themes/"+fl)
             config.set('VARS', 'theme', fl)
         except:
-            log("unable to locate theme file " + fl + ". updating current theme instead.")
+            log("unable to locate theme file " + fl + ".")
             f = open("themes/"+config.get('VARS', 'theme'))
     else:
         f = open("themes/"+config.get('VARS', 'theme'))

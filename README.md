@@ -3,6 +3,7 @@
 
 - this is a python recreation of the famous word game "wordle"
 - it uses the tkinter and configparser packages, and is built using pyinstaller
+- word lists taken from [here (legal answers)](https://www.wordunscrambler.net/word-list/wordle-word-list) and [here (legal guesses)](https://word-lists.com/word-lists/list-of-common-5-letter-words/)
 - includes themes!
 
 # instructions

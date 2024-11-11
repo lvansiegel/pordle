@@ -4,10 +4,12 @@
 import tkinter as tk
 from tkinter import ttk
 import random
+import math
 
 import os
 import configparser
 from colors import makeDisabledColor
+# from colors import addToHex
 
 ################
 # config setup #
@@ -25,18 +27,17 @@ def configInit():
                           "theme":"default.the"}
         config['COLORS'] = {"fg":"#000000",
                             "bg":"#f0f0f0",
-                            "abg":"#fafafa",
+                            "abg":"#ececec",
                             "glc":"#00aa00",
-                            "gla":"#ffff00",
-                            "gli":"#000000",
+                            "gla":"#edcd33",
+                            "gli":"#aaaaaa",
                             "lfg":"#aa0000",
                             "lbg":"#c0c0c0",
                             "kbd":"#ffffff",
                             "kbc":"#00ff00",
                             "kba":"#ffff00",
                             "kbi":"#555555",
-                            "kbbg":"#000000",
-                            "theme":"default.the"}
+                            "kbbg":"#000000"}
         with open('config.ini', 'w') as configfile:
             config.write(configfile)
     try:
@@ -52,18 +53,17 @@ def configInit():
                           "theme":"default"}
         config['COLORS'] = {"fg":"#000000",
                             "bg":"#f0f0f0",
-                            "abg":"#fafafa",
+                            "abg":"#ececec",
                             "glc":"#00aa00",
-                            "gla":"#ffff00",
-                            "gli":"#000000",
+                            "gla":"#edcd33",
+                            "gli":"#aaaaaa",
                             "lfg":"#aa0000",
                             "lbg":"#c0c0c0",
                             "kbd":"#ffffff",
                             "kbc":"#00ff00",
                             "kba":"#ffff00",
                             "kbi":"#555555",
-                            "kbbg":"#000000",
-                            "theme":"default"}
+                            "kbbg":"#000000"}
         with open('config.ini', 'w') as configfile:
             config.write(configfile)
 
@@ -76,9 +76,11 @@ root = tk.Tk()
 root.title("pordle")
 screenWidth = root.winfo_screenwidth()
 screenHeight = root.winfo_screenheight()
-sposx = str(int((screenWidth/2)-351))
-sposy = str(int((screenHeight/2)-343-60))
-root.geometry("702x686+"+sposx+"+"+sposy)
+sw = str(math.ceil(screenWidth*.45703125))
+sh = str(math.ceil(screenHeight*.7939814))
+sposx = str(int((screenWidth/2)-(int(sw)/2)))
+sposy = str(int((screenHeight/2)-(int(sh)/2)-60))
+root.geometry(sh+"x"+sw+"+"+sposx+"+"+sposy)
 root.config(padx=3,pady=3)
 root.resizable(0,0)
 
@@ -298,6 +300,10 @@ def compareWord(s):
         codes = [0 for i in range(wordlength)] # setup list of codes for adding to the list
         if s == word: # if the guess is equal to the word
             correct = True
+            for i in word:
+                if i not in corrLetters:
+                    corrLetters.append(i)
+            logKeyboard()
             guessList.insert(tk.END, s, ('correct'))
             entry['state'] = 'disabled'
             log("Congratulations, you got the word in {1} guesses!\nThe word was {0}. Press enter to restart.".format(word, guesses+1))
@@ -449,6 +455,8 @@ def setTheme():
     guessList.tag_config('alcorrect', foreground=gla)
     guessList.tag_config('incorrect', foreground=gli)
 
+    #quitButton.config(background=addToHex(bgc, 200, 0, 0), activebackground=abgc, foreground=addToHex(fgc, 200, 0, 0), activeforeground=afgc, disabledforeground=dfgc)
+
     hardModeButton.config(background=bgc, activebackground=abgc, foreground=fgc, activeforeground=afgc, disabledforeground=dfgc)
 
     themeSetButton.config(background=bgc, activebackground=abgc, foreground=fgc, activeforeground=afgc, disabledforeground=fgc)
@@ -549,6 +557,14 @@ guessList.tag_add('def', '1.0', tk.END)
 guessList['state'] = 'disabled'
 guessList.config(height=27, width=16, relief='flat')
 
+# quitButton = tk.Button(uframe)
+# quitButton.place(relx=.9, rely=.1, relwidth=.18, anchor='center')
+# quitButton.config(text="Quit", font="Consolas 16 bold", relief='raised', command=quit, cursor='hand2')
+
+quitButton = tk.Button(uframe)
+quitButton.place(relx=.99, rely=.02, relwidth=.05, relheight=.08, anchor='ne')
+quitButton.config(text="X", font="Arial 16", relief='raised', command=quit, cursor='hand2', background="#aa0000", activebackground="#880000", activeforeground="#ffffff", foreground="#ffffff")
+
 hardModeButton = tk.Button(uframe)
 hardModeButton.place(relx=.1, rely=.5, relwidth=.18, anchor='center')
 hardModeButton.config(text="Hard mode", font="Consolas 16 bold", relief='raised', command=hardModeToggle, cursor='hand2')
@@ -616,7 +632,7 @@ keyboardFrame.place(relx=.65, rely=.5, relwidth=.35, relheight=1, anchor='w')
 keyboardFrame.config(relief="sunken")
 
 keyboard = tk.Text(keyboardFrame)
-keyboard.place(relx=.5, rely=.5, relwidth=.9, relheight=.6, anchor='center')
+keyboard.place(relx=.5, rely=.5, relwidth=.95, relheight=.6, anchor='center')
 keyboard.config(relief='flat', font="Gothic 16", spacing1=4)
 keyboard.tag_config('just', justify='center')
 keyboard.insert(1.0, "kybard\n")

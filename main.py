@@ -156,7 +156,7 @@ def updateTheme():
         with open('config.ini', 'w') as configfile:
             config.write(configfile)
     else:
-        log("incorrect number of colors in theme file.")
+        log("incorrect number of colors in theme file \"{}\".".format(config.get('VARS', 'theme')))
         
     
     setTheme()
@@ -607,11 +607,13 @@ mframe.grid(row=1,column=0,sticky="nesw")
 
 errortxt = tk.Text(mframe,height=3)
 errortxt.place(relx=0, rely=.5, relwidth=.65, relheight=1, anchor='w')
+errortxt.config(relief="sunken")
 
 errortxt['state'] = 'disabled'
 
-keyboardFrame = tk.Frame(mframe)
+keyboardFrame = tk.Label(mframe) # frames can't have a relief ig, so i'm using a blank label instead
 keyboardFrame.place(relx=.65, rely=.5, relwidth=.35, relheight=1, anchor='w')
+keyboardFrame.config(relief="sunken")
 
 keyboard = tk.Text(keyboardFrame)
 keyboard.place(relx=.5, rely=.5, relwidth=.9, relheight=.6, anchor='center')

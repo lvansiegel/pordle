@@ -2,3 +2,4 @@ config.ini
 pordle.spec
 /build/
 /dist/
+/__pycache__/

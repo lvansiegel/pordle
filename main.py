@@ -131,6 +131,18 @@ hardMode = tk.IntVar()
 # definitions #
 ###############
 
+def isHex(s: str):
+    
+    '''only includes 6-digit hex numbers'''
+    if s[0] == "#":
+        ss = s.lower()[1:7]
+    else:
+        ss = s.lower()[:6]
+    for i in ss:
+        if i not in "abcdef1234567890":
+            return False
+    return "#"+ss
+
 def updateTheme():
     fl = themeSetDropdown.get() + ".the"
     if fl:
@@ -143,7 +155,7 @@ def updateTheme():
     else:
         f = open("themes/"+config.get('VARS', 'theme'))
     
-    col = ["#"+i[:6] for i in f.readlines() if i[:3] != "---" and i != "\n"]
+    col = [isHex(i) for i in f.readlines() if isHex(i)]
     if len(col) == 13:
         config['COLORS'] = {"fg":col[0],
                             "bg":col[1],

@@ -16,7 +16,7 @@ config = configparser.ConfigParser()
 def configInit():
     '''creates a new config file if either one doesn't exist or it does exist but is broken'''
     if (os.path.exists('config.ini') == False):
-        print("no config file exists, creating new one...")
+        print("No config file exists, creating new one...")
         config['VARS'] = {"wordsize":5,
                           "maxguesses":6,
                           "hardmode":False,
@@ -135,7 +135,7 @@ except Exception as e:
     exit()
 
 if not os.path.exists('./themes/'):
-    print("no themes directory found. creating...")
+    print("No themes directory found. Creating...")
     os.makedirs(os.curdir+'\\themes')
     f = open(os.path.realpath(os.curdir)+'\\themes\\default.the', 'w+')
     f.write("the parser will interpret every line that is not a single hex code as a comment\nin order, theme files have the following colors:\ngeneral: foreground, background, active background (buttons)\n\n000000\nf0f0f0\nececec\n\nguess list: correct, almost correct, incorrect\n\n00aa00\nedcd33\naaaaaa\n\nconsole: foreground, background\n\naa0000\nc0c0c0\n\nkeyboard: default text color, correct, almost correct, incorrect, background\n\nffffff\n00ff00\nffff00\n555555\n#000000\n(colors can either start with a # or not)")
@@ -173,7 +173,7 @@ def updateTheme():
             f = open("themes/"+fl)
             config.set('VARS', 'theme', fl)
         except:
-            log("unable to locate theme file " + fl + ".")
+            log("Unable to locate theme file " + fl + ".")
             f = open("themes/"+config.get('VARS', 'theme'))
     else:
         f = open("themes/"+config.get('VARS', 'theme'))
@@ -209,7 +209,7 @@ def updateTheme():
         else:
             log("Theme {} updated.".format(config.get('VARS', 'theme')[:-4]))
     else:
-        log("incorrect number of colors ({1}) in theme file \"{0}\".".format(config.get('VARS', 'theme'), len(col)))
+        log("Incorrect number of colors ({1}) in theme file \"{0}\".".format(config.get('VARS', 'theme'), len(col)))
         
     
     setTheme()
@@ -221,8 +221,12 @@ def resetVars():
     maxGuessesDropdown['state'] = 'readonly'
     maxGuessesButton['state'] = 'normal'
     try:
-        hardModeButton.config(cursor="hand2", background=buttonBg)
+        hardModeButton.config(cursor="hand2")
         maxGuessesButton.config(cursor="hand2", background=buttonBg)
+        if config.getboolean('VARS', 'hardmode'):
+            hardModeButton.config(background=activeBg)
+        else:
+            hardModeButton.config(background=buttonBg)
     except:
         hardModeButton.config(cursor='hand2')
         maxGuessesButton.config(cursor='hand2')
@@ -257,7 +261,7 @@ def resetVars():
     try:
         setTheme()
     except:
-        log("theme broken. please delete config file.")
+        log("Theme broken. Please delete config file.")
 
     global ln
     global lnFull
@@ -286,6 +290,7 @@ def log(s):
         errortxt['state'] = 'normal'
         errortxt.insert(tk.END, str(s)+"\n")
         errortxt['state'] = 'disabled'
+    errortxt.see(tk.END)
 
 def logKeyboard():
     keyboard['state'] = 'normal'
@@ -429,12 +434,12 @@ def submitWord():
                         if i in corrNums: #going through CORRNUMS and then the PREVIOUS GUESS and THE CURRENT GUESS
                             if prevGuess[i] != text[i]:
                                 validWord = False
-                                log("[hard mode] Word invalid: " + prevGuess[i] + " of " + prevGuess + " is not " + text[i] + " of " + text)
+                                log("[HARD MODE] Word invalid: " + prevGuess[i] + " of " + prevGuess + " is not " + text[i] + " of " + text)
                                 break
                     for i in alcorrLetters:
                         if i not in text:
                             validWord = False
-                            log("[hard mode] Word invalid: " + i + " not in " + text)
+                            log("[HARD MODE] Word invalid: " + i + " not in " + text)
                             break
                     if validWord:
                         compareWord(text)
@@ -448,7 +453,6 @@ def submitWord():
         if len(text) > 0:
             log("Word must be {} letters long.".format(str(wordlength)))
     logKeyboard()
-    errortxt.see(tk.END)
 
 def hardModeToggle():
     if config.getboolean('VARS','hardmode'):
@@ -462,7 +466,6 @@ def hardModeToggle():
 
     with open('config.ini', 'w') as configfile:
         config.write(configfile)
-    errortxt.see(tk.END)
 
 def setTheme():
     global buttonBg
@@ -511,7 +514,10 @@ def setTheme():
         hardModeButton.config(relief="raised")
 
     if hardModeButton['state'] == 'normal':
-        hardModeButton.config(background=buttonBg, activebackground=activeBg, foreground=buttonFg, activeforeground=activeFg, disabledforeground=disabledFg)
+        if config.getboolean('VARS', 'hardmode'):
+            hardModeButton.config(background=activeBg, activebackground=activeBg, foreground=buttonFg, activeforeground=activeFg, disabledforeground=disabledFg)
+        else:
+            hardModeButton.config(background=buttonBg, activebackground=activeBg, foreground=buttonFg, activeforeground=activeFg, disabledforeground=disabledFg)
     else:
         hardModeButton.config(background=disabledBg, activebackground=activeBg, foreground=buttonFg, activeforeground=activeFg, disabledforeground=disabledFg)
     
@@ -569,12 +575,14 @@ def updateMaxGuesses(*args):
         config.write(configfile)
     
     log("Max guesses set to "+config.get('VARS', 'maxguesses')+".")
-    errortxt.see(tk.END)
 
 def quitProgram(*args):
     raise SystemExit
 
-
+def resetGame(*args):
+    log("The word was {}. Restarting game...".format(word))
+    resetVars()
+    logKeyboard()
 
 
 ########
@@ -611,6 +619,10 @@ guessList.config(height=27, width=16, relief='flat')
 quitButton = tk.Button(uframe)
 quitButton.place(relx=.99, rely=.02, relwidth=.05, relheight=.08, anchor='ne')
 quitButton.config(text="X", font="Arial 16", relief='raised', command=quitProgram, cursor='hand2', background="#aa0000", activebackground="#880000", activeforeground="#ffffff", foreground="#ffffff")
+
+restartButton = tk.Button(uframe)
+restartButton.place(relx=.99, rely=.11, relwidth=.05, relheight=.08, anchor='ne')
+restartButton.config(text="↺", font="Arial 16 bold", relief='raised', command=resetGame, cursor='hand2', background="#efefff", activebackground="#a0a0cc", activeforeground="#000000", foreground="#000000")
 
 hardModeButton = tk.Button(uframe)
 hardModeButton.place(relx=.1, rely=.5, relwidth=.18, anchor='center')

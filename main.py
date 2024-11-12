@@ -121,7 +121,7 @@ if not os.path.exists('./themes/'):
     os.makedirs(os.curdir+'\\themes')
     f = open(os.path.realpath(os.curdir)+'\\themes\\default.the', 'w+')
     f.write("the parser will interpret every line that is not a single hex code as a comment\nin order, theme files have the following colors:\ngeneral: foreground, background, active background (buttons)\n\n000000\nf0f0f0\nececec\n\nguess list: correct, almost correct, incorrect\n\n00aa00\nedcd33\naaaaaa\n\nconsole: foreground, background\n\naa0000\nc0c0c0\n\nkeyboard: default text color, correct, almost correct, incorrect, background\n\nffffff\n00ff00\nffff00\n555555\n#000000\n(colors can either start with a # or not)")
-    
+
     config.set('VARS', 'theme', 'default.the')
     with open('config.ini', 'w') as configfile:
         config.write(configfile)
@@ -223,9 +223,6 @@ def resetVars():
     guesses = 0
     maxguesses = config.getint('VARS', 'wordsize')
 
-    #global hardMode
-    #hardMode = True
-
     try:
         setTheme()
     except:
@@ -266,7 +263,6 @@ def logKeyboard():
     uRow = "QWERTYUIOP"
     mRow = "ASDFGHJKL"
     dRow = "ZXCVBNM"
-    # keyboard.insert(tk.END, "\n")
     
     for i in uRow:
         if i in corrLetters:
@@ -306,7 +302,6 @@ def logKeyboard():
             keyboard.insert(tk.END, " ")
     keyboard.insert(tk.END, " ")
     
-    #keyboard.insert(tk.END, '\n')
     keyboard.tag_add('just', '1.0', tk.END)
     keyboard['state'] = 'disabled'
 
@@ -341,10 +336,8 @@ def compareWord(s):
             
             for i in range(wordlength): #do all correct letter checks first
                 if s[i] == word[i]: # correct letter check
-                    #corrl.append(i)
                     corrLetters.append(s[i])
                     corrNums.append(i)
-                    #guessList.insert(tk.END, s[i], ('correct'))
                     codes[i] = 2
                     lcd[s[i]] -= 1
             for i in range(wordlength):
@@ -352,16 +345,12 @@ def compareWord(s):
                     if s[i] in lcd.keys(): # al(most)correct letter check
                         if lcd[s[i]] > 0:
                             lcd[s[i]] -= 1
-                            #alcorrl.append(i)
                             alcorrLetters.append(s[i])
-                            #guessList.insert(tk.END, s[i], ('alcorrect'))
                             codes[i] = 1
                         else:
-                            # guessList.insert(tk.END, s[i], ('incorrect'))
                             incorrLetters.append(s[i])
                             codes[i] = 0
                     else: # incorrect letter set
-                        # guessList.insert(tk.END, s[i], ('incorrect'))
                         incorrLetters.append(s[i])
                         codes[i] = 0
             
@@ -420,14 +409,11 @@ def submitWord():
                         compareWord(text)
                         prevGuess = text
                         entry.delete(0, tk.END)
-                    # else:
-                    #     log("Word not valid [hard mode restriction].")
             else:
                 log("Word " + text + " not in dictionary.")
         else:
             log("Word must contain only letters.")
     else:
-        #errortxt.config(text="Word must be 5 characters long.")
         if len(text) > 0:
             log("Word must be {} letters long.".format(str(wordlength)))
     logKeyboard()
@@ -451,11 +437,11 @@ def setTheme():
     global bgc
     global abgc
     bgc = config.get('COLORS', "bg")
-    abgc = config.get('COLORS', "abg")#addToHex(bgc, -20, -20, -20)#config.get('COLORS', "abg")#
+    abgc = config.get('COLORS', "abg")
     dbgc = makeDisabledColor(bgc, +60, +60, +60)
     fgc = config.get('COLORS', "fg")
     afgc = makeDisabledColor(fgc, 20, 20, 20)
-    dfgc = makeDisabledColor(fgc, 60, 60, 60)#addToHex(fgc, -40, 40, -40)
+    dfgc = makeDisabledColor(fgc, 60, 60, 60)
 
     glc = config.get('COLORS', "glc")
     gla = config.get('COLORS', "gla")
@@ -479,8 +465,6 @@ def setTheme():
     guessList.tag_config('alcorrect', foreground=gla)
     guessList.tag_config('incorrect', foreground=gli)
 
-    #quitButton.config(background=addToHex(bgc, 200, 0, 0), activebackground=abgc, foreground=addToHex(fgc, 200, 0, 0), activeforeground=afgc, disabledforeground=dfgc)
-
     hardModeButton.config(background=bgc, activebackground=abgc, foreground=fgc, activeforeground=afgc, disabledforeground=dfgc)
 
     themeSetButton.config(background=bgc, activebackground=abgc, foreground=fgc, activeforeground=afgc, disabledforeground=fgc)
@@ -489,7 +473,6 @@ def setTheme():
     #at some point i'd like to be able to set the relief of all of the combobox elements but whatever ig
     tsds.theme_settings('combostyle', settings={'TCombobox': { 'configure': {
                                                                             'foreground':fgc,
-                                                                            # 'relief':'flat',
                                                                             'padding':'flat',
                                                                             'selectforeground':fgc,
                                                                             'selectbackground':bgc,
@@ -512,7 +495,6 @@ def setTheme():
 
     lframe.config(background=bgc)
 
-    #guessLabel.config(background=bgc, foreground=fgc)
     maxGuessesButton.config(background=bgc, activebackground=abgc, foreground=fgc, activeforeground=afgc, disabledforeground=dfgc)
 
     entry.config(background=bgc, foreground=fgc, disabledbackground=dbgc, disabledforeground=dfgc)

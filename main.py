@@ -120,7 +120,11 @@ if not os.path.exists('./themes/'):
     print("no themes directory found. creating...")
     os.makedirs(os.curdir+'\\themes')
     f = open(os.path.realpath(os.curdir)+'\\themes\\default.the', 'w+')
-    f.write("--- in order, theme files have the following colors:\n--- general: foreground, background, active background (buttons)\n\n000000\nf0f0f0\nececec\n\n--- guess list: correct, almost correct, incorrect\n\n00aa00\nedcd33\naaaaaa\n\n--- console: foreground, background\n\naa0000\nc0c0c0\n\n--- keyboard: default text color, correct, almost correct, incorrect, background\n\nffffff\n00ff00\nffff00\n555555\n000000\n\n--- do not put #s before the colors")
+    f.write("the parser will interpret every line that is not a single hex code as a comment\nin order, theme files have the following colors:\ngeneral: foreground, background, active background (buttons)\n\n000000\nf0f0f0\nececec\n\nguess list: correct, almost correct, incorrect\n\n00aa00\nedcd33\naaaaaa\n\nconsole: foreground, background\n\naa0000\nc0c0c0\n\nkeyboard: default text color, correct, almost correct, incorrect, background\n\nffffff\n00ff00\nffff00\n555555\n#000000\n(colors can either start with a # or not)")
+    
+    config.set('VARS', 'theme', 'default.the')
+    with open('config.ini', 'w') as configfile:
+        config.write(configfile)
     f.close()
 
 prevGuess = ""
@@ -144,6 +148,7 @@ def isHex(s: str):
     return "#"+ss
 
 def updateTheme():
+    oth = config.get('VARS', 'theme')
     fl = themeSetDropdown.get() + ".the"
     if fl:
         try:
@@ -172,6 +177,10 @@ def updateTheme():
                             "kbbg":col[12]}
         with open('config.ini', 'w') as configfile:
             config.write(configfile)
+        if oth != config.get('VARS', 'theme'):
+            log("Theme set to {}.".format(config.get('VARS', 'theme')[:-4]))
+        else:
+            log("Theme {} updated.".format(config.get('VARS', 'theme')[:-4]))
     else:
         log("incorrect number of colors in theme file \"{}\".".format(config.get('VARS', 'theme')))
         

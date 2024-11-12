@@ -79,29 +79,12 @@ sposy = str(int((screenHeight/2)-(sh/2)-60))
 root.geometry(str(sh)+"x"+str(sw)+"+"+sposx+"+"+sposy)
 root.config(padx=3,pady=3)
 root.resizable(0,0)
-print(screenWidth, screenHeight)
-print(sw, sh)
-print(root.winfo_fpixels('1i'))
-dpi = root.winfo_fpixels('1i')
-# font sizes - uses 702/intended size on my display = x
-# fm = {'guesslist': round(sw*.044584), 'button': round(sw*.022792), 'dropdown': round(sw*.017094), 'mgbutton': round(sw*.014245), 'keyboard': round(sw*.022792)}
-# fm = {'guesslist': round(sw*.03644646924829157175398633257403), 'button': round(sw*.022792), 'dropdown': round(sw*.017094), 'mgbutton': round(sw*.014245), 'keyboard': round(sw*.022792)}
-#for this one, [96/intended size]
-# #32 16 12 10 16
-# fm = {'guesslist': round(dpi/3),
-#       'button': round(dpi/6),
-#       'dropdown': round(dpi/8),
-#       'mgbutton': round(dpi/9.6),
-#       'keyboard': round(dpi/6)}
-# expectedScreenWidth = 1536
-# textFactor = expectedScreenWidth/screenWidth
-#it just works now for some reason
-fm = {'guesslist': 32,#*textFactor),
+
+fm = {'guesslist': 32,
       'button': 16,
       'dropdown': 12,
       'mgbutton': 10,
       'keyboard': 16}
-print(fm)
 
 
 ########
@@ -589,42 +572,25 @@ themeSetButton.place(relx=.9, rely=.5, relwidth=.18, anchor='center')
 themeSetButton.config(text="Set Theme", font="Consolas {} bold".format(fm['button']), relief='raised', command=updateTheme, cursor='hand2')
 
 
-test = ["a", "b", "c", "d"]
-
 tsds = ttk.Style()
-#tsds.map('TCombobox', fieldbackground=[('readonly', 'red')])
-# https://stackoverflow.com/questions/27912250/how-to-set-the-background-color-of-a-ttk-combobox
-# tsds.theme_create('combostyle',# parent='alt',
-#                          settings = {'TCombobox':
-#                                      {'configure':
-#                                       {'selectbackground': 'blue',
-#                                        'fieldbackground': 'red',
-#                                        'background': 'green'
-#                                        }}}
-#                          )
 tsds.theme_create('combostyle')
 tsds.theme_use('combostyle')
 
-themeSetDropdown = ttk.Combobox(uframe, values=test, state='readonly')
+themeSetDropdown = ttk.Combobox(uframe, state='readonly')
 themeSetDropdown.place(relx=.9, rely=.6, relwidth=.18, relheight= .09, anchor='center')
 themeSetDropdown.set(config.get('VARS', 'theme')[:-4])
 themeSetDropdown.bind('<FocusIn>', updateThemesList)
 themeSetDropdown.config(font=('Consolas', fm['dropdown']))#12
 
-# guessLabel = tk.Label(uframe)
-# guessLabel.place(relx=0.01, rely=.7, anchor='w')
-# guessLabel.config(text="Max guesses: " + config.get('VARS', 'maxguesses'), font="Consolas 14 bold")
 maxGuessesButton = tk.Button(uframe)
 maxGuessesButton.place(relx=.065, rely=.6, relwidth=.11, relheight= .09, anchor='center')
 maxGuessesButton.config(text="Set max\nguesses", font="Consolas {} bold".format(fm['mgbutton']), relief='raised', command=updateMaxGuesses, cursor='hand2')
 mgv = tk.IntVar()
 nl = [i for i in range(1,21)]
-#nl.append("infinite")
 maxGuessesDropdown = ttk.Combobox(uframe, values=nl, state='readonly')
 maxGuessesDropdown.set(config.get('VARS', 'maxguesses'))
 maxGuessesDropdown.place(relx=.16, rely=.6, relwidth=.06, relheight= .09, anchor='center')
 maxGuessesDropdown.config(font="Consolas 11 bold")
-# command=updateMaxGuesses
 
 ######################################
 # middle frame; keys/error reporting #
@@ -664,25 +630,19 @@ lframe.columnconfigure(0, weight=1)
 lframe.columnconfigure(1, weight=5)
 lframe.columnconfigure(2, weight=1)
 
-# ll = tk.Label(lframe)
-# ll.grid(row=0,column=0,sticky="nesw")
-# ll.config(relief="flat")
-
 entry = tk.Entry(lframe)
-# entry.grid(row=0,column=1,sticky="nesw")
 entry.place(relx=.48, rely=.5, relwidth=.82, relheight=1, anchor='center')
 entry.config(justify='center',font="Consolas {}".format(fm['guesslist']))
 
 entry.bind("<Return>", lambda event: submitWord())
 
 submit = tk.Button(lframe)
-# submit.grid(row=0,column=2,sticky="nesw")
 submit.place(relx=.95, rely=.5, relwidth=.09, relheight=1, anchor='center')
 submit.config(text="⏎",command=submitWord, font="Consolas 24 bold", cursor='hand2')
 
-###############################
-###############################
-###############################
+#################
+# begin program #
+#################
 
 logKeyboard()
 word = chooseWord()

@@ -72,13 +72,37 @@ root = tk.Tk()
 root.title("pordle")
 screenWidth = root.winfo_screenwidth()
 screenHeight = root.winfo_screenheight()
-sw = str(math.ceil(screenWidth*.45703125))
-sh = str(math.ceil(screenHeight*.7939814))
-sposx = str(int((screenWidth/2)-(int(sw)/2)))
-sposy = str(int((screenHeight/2)-(int(sh)/2)-60))
-root.geometry(sh+"x"+sw+"+"+sposx+"+"+sposy)
+sw = math.ceil(screenWidth*.45703125)
+sh = math.ceil(screenHeight*.7939814)
+sposx = str(int((screenWidth/2)-(sw/2)))
+sposy = str(int((screenHeight/2)-(sh/2)-60))
+root.geometry(str(sh)+"x"+str(sw)+"+"+sposx+"+"+sposy)
 root.config(padx=3,pady=3)
 root.resizable(0,0)
+print(screenWidth, screenHeight)
+print(sw, sh)
+print(root.winfo_fpixels('1i'))
+dpi = root.winfo_fpixels('1i')
+# font sizes - uses 702/intended size on my display = x
+# fm = {'guesslist': round(sw*.044584), 'button': round(sw*.022792), 'dropdown': round(sw*.017094), 'mgbutton': round(sw*.014245), 'keyboard': round(sw*.022792)}
+# fm = {'guesslist': round(sw*.03644646924829157175398633257403), 'button': round(sw*.022792), 'dropdown': round(sw*.017094), 'mgbutton': round(sw*.014245), 'keyboard': round(sw*.022792)}
+#for this one, [96/intended size]
+# #32 16 12 10 16
+# fm = {'guesslist': round(dpi/3),
+#       'button': round(dpi/6),
+#       'dropdown': round(dpi/8),
+#       'mgbutton': round(dpi/9.6),
+#       'keyboard': round(dpi/6)}
+# expectedScreenWidth = 1536
+# textFactor = expectedScreenWidth/screenWidth
+#it just works now for some reason
+fm = {'guesslist': 32,#*textFactor),
+      'button': 16,
+      'dropdown': 12,
+      'mgbutton': 10,
+      'keyboard': 16}
+print(fm)
+
 
 ########
 # vars #
@@ -547,7 +571,7 @@ uframe.rowconfigure(1, weight=1)
 guessList = tk.Text(uframe)
 guessList.place(relx=.5, rely=.5, relwidth=.7, anchor='center')
 #tags
-guessList.tag_config('def', font="Consolas 32", justify="center")
+guessList.tag_config('def', font=("Consolas", fm["guesslist"]), justify="center")
 guessList.tag_add('def', '1.0', tk.END)
 guessList['state'] = 'disabled'
 guessList.config(height=27, width=16, relief='flat')
@@ -558,11 +582,11 @@ quitButton.config(text="X", font="Arial 16", relief='raised', command=quitProgra
 
 hardModeButton = tk.Button(uframe)
 hardModeButton.place(relx=.1, rely=.5, relwidth=.18, anchor='center')
-hardModeButton.config(text="Hard mode", font="Consolas 16 bold", relief='raised', command=hardModeToggle, cursor='hand2')
+hardModeButton.config(text="Hard mode", font="Consolas {} bold".format(fm['button']), relief='raised', command=hardModeToggle, cursor='hand2')
 
 themeSetButton = tk.Button(uframe)
 themeSetButton.place(relx=.9, rely=.5, relwidth=.18, anchor='center')
-themeSetButton.config(text="Set Theme", font="Consolas 16 bold", relief='raised', command=updateTheme, cursor='hand2')
+themeSetButton.config(text="Set Theme", font="Consolas {} bold".format(fm['button']), relief='raised', command=updateTheme, cursor='hand2')
 
 
 test = ["a", "b", "c", "d"]
@@ -585,14 +609,14 @@ themeSetDropdown = ttk.Combobox(uframe, values=test, state='readonly')
 themeSetDropdown.place(relx=.9, rely=.6, relwidth=.18, relheight= .09, anchor='center')
 themeSetDropdown.set(config.get('VARS', 'theme')[:-4])
 themeSetDropdown.bind('<FocusIn>', updateThemesList)
-themeSetDropdown.config(font='Consolas 12')
+themeSetDropdown.config(font=('Consolas', fm['dropdown']))#12
 
 # guessLabel = tk.Label(uframe)
 # guessLabel.place(relx=0.01, rely=.7, anchor='w')
 # guessLabel.config(text="Max guesses: " + config.get('VARS', 'maxguesses'), font="Consolas 14 bold")
 maxGuessesButton = tk.Button(uframe)
 maxGuessesButton.place(relx=.065, rely=.6, relwidth=.11, relheight= .09, anchor='center')
-maxGuessesButton.config(text="Set max\nguesses", font="Consolas 10 bold", relief='raised', command=updateMaxGuesses, cursor='hand2')
+maxGuessesButton.config(text="Set max\nguesses", font="Consolas {} bold".format(fm['mgbutton']), relief='raised', command=updateMaxGuesses, cursor='hand2')
 mgv = tk.IntVar()
 nl = [i for i in range(1,21)]
 #nl.append("infinite")
@@ -624,7 +648,7 @@ keyboardFrame.config(relief="sunken")
 
 keyboard = tk.Text(keyboardFrame)
 keyboard.place(relx=.5, rely=.5, relwidth=.95, relheight=.6, anchor='center')
-keyboard.config(relief='flat', font="Gothic 16", spacing1=4)
+keyboard.config(relief='flat', font="Gothic {}".format(fm['keyboard']), spacing1=4)
 keyboard.tag_config('just', justify='center')
 keyboard.insert(1.0, "kybard\n")
 keyboard['state'] = 'disabled'
@@ -647,7 +671,7 @@ lframe.columnconfigure(2, weight=1)
 entry = tk.Entry(lframe)
 # entry.grid(row=0,column=1,sticky="nesw")
 entry.place(relx=.48, rely=.5, relwidth=.82, relheight=1, anchor='center')
-entry.config(justify='center',font="Consolas 32")
+entry.config(justify='center',font="Consolas {}".format(fm['guesslist']))
 
 entry.bind("<Return>", lambda event: submitWord())
 

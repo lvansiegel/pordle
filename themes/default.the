@@ -1,27 +1,58 @@
-the parser will interpret every line that is not a single hex code as a comment
+the parser will interpret every line that is not a single hex code as a comment (either including a # or not)
 in order, theme files have the following colors:
-general: foreground, background, active background (buttons)
 
-000000
+background
 f0f0f0
-ececec
+foreground
+000000
 
-guess list: correct, almost correct, incorrect
+buttons:
+background
+c0c0c0
+active background
+909090
+disabled background
+868686
 
+foreground
+000000
+active foreground
+000000
+disabled foreground
+505050
+
+guess list:
+correct
 00aa00
+almost correct
 edcd33
+incorrect
 aaaaaa
 
-console: foreground, background
-
-aa0000
+console:
+background
 c0c0c0
+foreground
+aa0000
 
-keyboard: default text color, correct, almost correct, incorrect, background
-
+keyboard:
+background
+000000
+default
 ffffff
+correct
 00ff00
+almost correct
 ffff00
+incorrect
 555555
-#000000
-(colors can either start with a # or not)
+
+entry:
+background
+f0f0f0
+foreground
+000000
+disabled background
+d0d0d0
+disabled foreground
+707070

@@ -16,4 +16,4 @@
 # future goals
 - [ ] add options for different word lengths (requires separate dictionaries for each length)
 - [ ] also an option for different word languages (also requires separate dictionaries)
-- [ ] give themes optional values to control all of the colors used in the program
+- [x] give themes ~~optional~~ values to control all of the colors used in the program

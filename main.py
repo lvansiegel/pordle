@@ -21,19 +21,28 @@ def configInit():
                           "maxguesses":6,
                           "hardmode":False,
                           "theme":"default.the"}
-        config['COLORS'] = {"fg":"#000000",
-                            "bg":"#f0f0f0",
-                            "abg":"#ececec",
-                            "glc":"#00aa00",
-                            "gla":"#edcd33",
-                            "gli":"#aaaaaa",
-                            "lfg":"#aa0000",
-                            "lbg":"#c0c0c0",
-                            "kbd":"#ffffff",
-                            "kbc":"#00ff00",
-                            "kba":"#ffff00",
-                            "kbi":"#555555",
-                            "kbbg":"#000000"}
+        config['COLORS'] = {"bg":"#000000",
+                            "buttonBg":"#f0f0f0",
+                            "activeBg":"#ececec",
+                            "disabledBg":"030303",
+                            "fg":"#00aa00",
+                            "buttonFg":"#edcd33",
+                            "activeFg":"#aaaaaa",
+                            "disabledFg":"#aa0000",
+                            "guessListCorrect":"#c0c0c0",
+                            "guessListAlcorrect":"#ffffff",
+                            "guessListIncorrect":"#00ff00",
+                            "logFg":"#ffff00",
+                            "logBg":"#555555",
+                            "keyboardDefault":"#000000",
+                            "keyboardCorrect":"#f0f0f0",
+                            "keyboardAlcorrect":"#ececec",
+                            "keyboardIncorrect":"#00aa00",
+                            "keyboardBg":"#00aa00",
+                            "entryBg":"#edcd33",
+                            "entryFg":"#aaaaaa",
+                            "entryDisabledBg":"#aa0000",
+                            "entryDisabledFg":"#c0c0c0"}
         with open('config.ini', 'w') as configfile:
             config.write(configfile)
     try:
@@ -47,19 +56,28 @@ def configInit():
                           "maxguesses":6,
                           "hardmode":False,
                           "theme":"default"}
-        config['COLORS'] = {"fg":"#000000",
-                            "bg":"#f0f0f0",
-                            "abg":"#ececec",
-                            "glc":"#00aa00",
-                            "gla":"#edcd33",
-                            "gli":"#aaaaaa",
-                            "lfg":"#aa0000",
-                            "lbg":"#c0c0c0",
-                            "kbd":"#ffffff",
-                            "kbc":"#00ff00",
-                            "kba":"#ffff00",
-                            "kbi":"#555555",
-                            "kbbg":"#000000"}
+        config['COLORS'] = {"bg":"#000000",
+                            "buttonBg":"#f0f0f0",
+                            "activeBg":"#ececec",
+                            "disabledBg":"030303",
+                            "fg":"#00aa00",
+                            "buttonFg":"#edcd33",
+                            "activeFg":"#aaaaaa",
+                            "disabledFg":"#aa0000",
+                            "guessListCorrect":"#c0c0c0",
+                            "guessListAlcorrect":"#ffffff",
+                            "guessListIncorrect":"#00ff00",
+                            "logFg":"#ffff00",
+                            "logBg":"#555555",
+                            "keyboardDefault":"#000000",
+                            "keyboardCorrect":"#f0f0f0",
+                            "keyboardAlcorrect":"#ececec",
+                            "keyboardIncorrect":"#00aa00",
+                            "keyboardBg":"#00aa00",
+                            "entryBg":"#edcd33",
+                            "entryFg":"#aaaaaa",
+                            "entryDisabledBg":"#aa0000",
+                            "entryDisabledFg":"#c0c0c0"}
         with open('config.ini', 'w') as configfile:
             config.write(configfile)
 
@@ -161,20 +179,29 @@ def updateTheme():
         f = open("themes/"+config.get('VARS', 'theme'))
     
     col = [isHex(i) for i in f.readlines() if isHex(i)]
-    if len(col) == 13:
-        config['COLORS'] = {"fg":col[0],
-                            "bg":col[1],
-                            "abg":col[2],
-                            "glc":col[3],
-                            "gla":col[4],
-                            "gli":col[5],
-                            "lfg":col[6],
-                            "lbg":col[7],
-                            "kbd":col[8],
-                            "kbc":col[9],
-                            "kba":col[10],
-                            "kbi":col[11],
-                            "kbbg":col[12]}
+    if len(col) == 22:
+        config['COLORS'] = {"bg":col[0],
+                            "buttonBg":col[2],
+                            "activeBg":col[3],
+                            "disabledBg":col[4],
+                            "fg":col[1],
+                            "buttonFg":col[5],
+                            "activeFg":col[6],
+                            "disabledFg":col[7],
+                            "guessListCorrect":col[8],
+                            "guessListAlcorrect":col[9],
+                            "guessListIncorrect":col[10],
+                            "logFg":col[12],
+                            "logBg":col[11],
+                            "keyboardDefault":col[14],
+                            "keyboardCorrect":col[15],
+                            "keyboardAlcorrect":col[16],
+                            "keyboardIncorrect":col[17],
+                            "keyboardBg":col[13],
+                            "entryBg":col[18],
+                            "entryFg":col[19],
+                            "entryDisabledBg":col[20],
+                            "entryDisabledFg":col[21]}
         with open('config.ini', 'w') as configfile:
             config.write(configfile)
         if oth != config.get('VARS', 'theme'):
@@ -182,7 +209,7 @@ def updateTheme():
         else:
             log("Theme {} updated.".format(config.get('VARS', 'theme')[:-4]))
     else:
-        log("incorrect number of colors in theme file \"{}\".".format(config.get('VARS', 'theme')))
+        log("incorrect number of colors ({1}) in theme file \"{0}\".".format(config.get('VARS', 'theme'), len(col)))
         
     
     setTheme()
@@ -193,8 +220,12 @@ def resetVars():
     hardModeButton['state'] = 'normal'
     maxGuessesDropdown['state'] = 'readonly'
     maxGuessesButton['state'] = 'normal'
-    hardModeButton.config(cursor="hand2")
-    maxGuessesButton.config(cursor="hand2")
+    try:
+        hardModeButton.config(cursor="hand2", background=buttonBg)
+        maxGuessesButton.config(cursor="hand2", background=buttonBg)
+    except:
+        hardModeButton.config(cursor='hand2')
+        maxGuessesButton.config(cursor='hand2')
     
     global wordlength
     wordlength = int(config.get('VARS', 'wordsize'))
@@ -385,8 +416,8 @@ def submitWord():
                 hardModeButton['state'] = 'disabled'
                 maxGuessesDropdown['state'] = 'disabled'
                 maxGuessesButton['state'] = 'disabled'
-                hardModeButton.config(cursor="arrow")
-                maxGuessesButton.config(cursor="arrow")
+                hardModeButton.config(cursor="arrow", background=disabledBg)
+                maxGuessesButton.config(cursor="arrow", background=disabledBg)
 
                 if config.getboolean('VARS', 'hardmode') == False or prevGuess == "":
                     compareWord(text)
@@ -423,89 +454,104 @@ def hardModeToggle():
     if config.getboolean('VARS','hardmode'):
         log("Hard mode disabled.")
         config.set('VARS','hardmode', "0")
-        hardModeButton.config(relief="raised", background=bgc)
+        hardModeButton.config(relief="raised", background=buttonBg)
     else:
         log("Hard mode enabled.")
         config.set('VARS','hardmode', "1")
-        hardModeButton.config(relief="sunken", background=abgc)
+        hardModeButton.config(relief="sunken", background=activeBg)
 
     with open('config.ini', 'w') as configfile:
         config.write(configfile)
     errortxt.see(tk.END)
 
 def setTheme():
-    global bgc
-    global abgc
-    bgc = config.get('COLORS', "bg")
-    abgc = config.get('COLORS', "abg")
-    dbgc = makeDisabledColor(bgc, +60, +60, +60)
-    fgc = config.get('COLORS', "fg")
-    afgc = makeDisabledColor(fgc, 20, 20, 20)
-    dfgc = makeDisabledColor(fgc, 60, 60, 60)
+    global buttonBg
+    global activeBg
+    global disabledBg
+    bg = config.get('COLORS', "bg")
+    buttonBg = config.get('COLORS', "buttonBg")
+    activeBg = config.get('COLORS', "activeBg")
+    disabledBg = config.get('COLORS', 'disabledBg')
+    fg = config.get('COLORS', "fg")
+    buttonFg = config.get('COLORS', "buttonFg")
+    activeFg = config.get('COLORS', 'activeFg')
+    disabledFg = config.get('COLORS', 'disabledFg')
 
-    glc = config.get('COLORS', "glc")
-    gla = config.get('COLORS', "gla")
-    gli = config.get('COLORS', "gli")
+    guessListCorrect = config.get('COLORS', "guessListCorrect")
+    guessListAlcorrect = config.get('COLORS', "guessListAlcorrect")
+    guessListIncorrect = config.get('COLORS', "guessListIncorrect")
 
-    logfg = config.get('COLORS', "lfg")
-    logbg = config.get('COLORS', "lbg")
+    logFg = config.get('COLORS', "logFg")
+    logBg = config.get('COLORS', "logBg")
     
-    kbd = config.get('COLORS', "kbd")
-    kbc = config.get('COLORS', "kbc")
-    kba = config.get('COLORS', "kba")
-    kbi = config.get('COLORS', "kbi")
-    kbbg = config.get('COLORS', "kbbg")
+    keyboardDefault = config.get('COLORS', "keyboardDefault")
+    keyboardCorrect = config.get('COLORS', "keyboardCorrect")
+    keyboardAlcorrect = config.get('COLORS', "keyboardAlcorrect")
+    keyboardIncorrect = config.get('COLORS', "keyboardIncorrect")
+    keyboardBg = config.get('COLORS', "keyboardBg")
 
-    root.config(background=bgc)
+    entryBg = config.get('COLORS', 'entryBg')
+    entryFg = config.get('COLORS', 'entryFg')
+    entryDisabledBg = config.get('COLORS', 'entryDisabledBg')
+    entryDisabledFg = config.get('COLORS', 'entryDisabledFg')
+    
 
-    uframe.config(background=bgc)
+    root.config(background=bg)
 
-    guessList.config(background=bgc)
-    guessList.tag_config('correct', foreground=glc)
-    guessList.tag_config('alcorrect', foreground=gla)
-    guessList.tag_config('incorrect', foreground=gli)
+    uframe.config(background=bg)
 
-    hardModeButton.config(background=bgc, activebackground=abgc, foreground=fgc, activeforeground=afgc, disabledforeground=dfgc)
+    guessList.config(background=bg)
+    guessList.tag_config('correct', foreground=guessListCorrect)
+    guessList.tag_config('alcorrect', foreground=guessListAlcorrect)
+    guessList.tag_config('incorrect', foreground=guessListIncorrect)
 
-    themeSetButton.config(background=bgc, activebackground=abgc, foreground=fgc, activeforeground=afgc, disabledforeground=fgc)
+    if config.getboolean('VARS','hardmode'):
+        hardModeButton.config(relief="sunken")
+    else:
+        hardModeButton.config(relief="raised")
+
+    if hardModeButton['state'] == 'normal':
+        hardModeButton.config(background=buttonBg, activebackground=activeBg, foreground=buttonFg, activeforeground=activeFg, disabledforeground=disabledFg)
+    else:
+        hardModeButton.config(background=disabledBg, activebackground=activeBg, foreground=buttonFg, activeforeground=activeFg, disabledforeground=disabledFg)
+    
+
+    themeSetButton.config(background=buttonBg, activebackground=activeBg, foreground=buttonFg, activeforeground=activeFg, disabledforeground=disabledFg)
     
     #https://tkdocs.com/shipman/ttk-map.html
     #at some point i'd like to be able to set the relief of all of the combobox elements but whatever ig
     tsds.theme_settings('combostyle', settings={'TCombobox': { 'configure': {
-                                                                            'foreground':fgc,
+                                                                            'foreground':fg,
                                                                             'padding':'flat',
-                                                                            'selectforeground':fgc,
-                                                                            'selectbackground':bgc,
-                                                                            'fieldbackground':bgc,
-                                                                            'background':abgc,
-                                                                            'arrowcolor':fgc,
+                                                                            'selectforeground':fg,
+                                                                            'selectbackground':bg,
+                                                                            'fieldbackground':bg,
+                                                                            'background':activeBg,
+                                                                            'arrowcolor':fg,
                                                                             'padding':2,
                                                                             }}})
-    mframe.config(background=bgc)
+    mframe.config(background=bg)
 
-    errortxt.config(foreground=logfg,background=logbg)
+    errortxt.config(foreground=logFg,background=logBg)
 
-    keyboardFrame.config(background=kbbg)
+    keyboardFrame.config(background=keyboardBg)
 
-    keyboard.config(background=kbbg)
-    keyboard.tag_config('correct', foreground=kbc)
-    keyboard.tag_config('alcorrect', foreground=kba)
-    keyboard.tag_config('incorrect', foreground=kbi)
-    keyboard.tag_config('def', foreground=kbd)
+    keyboard.config(background=keyboardBg)
+    keyboard.tag_config('correct', foreground=keyboardCorrect)
+    keyboard.tag_config('alcorrect', foreground=keyboardAlcorrect)
+    keyboard.tag_config('incorrect', foreground=keyboardIncorrect)
+    keyboard.tag_config('def', foreground=keyboardDefault)
 
-    lframe.config(background=bgc)
+    lframe.config(background=bg)
 
-    maxGuessesButton.config(background=bgc, activebackground=abgc, foreground=fgc, activeforeground=afgc, disabledforeground=dfgc)
-
-    entry.config(background=bgc, foreground=fgc, disabledbackground=dbgc, disabledforeground=dfgc)
-
-    submit.config(background=bgc, activebackground=abgc, foreground=fgc, activeforeground=afgc, disabledforeground=dfgc)
-
-
-    if config.getboolean('VARS','hardmode'):
-        hardModeButton.config(relief="sunken", background=abgc)
+    if maxGuessesButton['state'] == 'normal':
+        maxGuessesButton.config(background=buttonBg, activebackground=activeBg, foreground=buttonFg, activeforeground=activeFg, disabledforeground=disabledFg)
     else:
-        hardModeButton.config(relief="raised", background=bgc)
+        maxGuessesButton.config(background=disabledBg, activebackground=activeBg, foreground=buttonFg, activeforeground=activeFg, disabledforeground=disabledFg)
+
+    entry.config(background=entryBg, foreground=entryFg, disabledbackground=entryDisabledBg, disabledforeground=entryDisabledFg)
+
+    submit.config(background=buttonBg, activebackground=activeBg, foreground=buttonFg, activeforeground=activeFg, disabledforeground=disabledFg)
     updateThemesList()
     
 def updateThemesList(*args):

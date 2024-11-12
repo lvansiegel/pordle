@@ -2,7 +2,6 @@ import tkinter as tk
 from tkinter import ttk
 import random
 import math
-import sys
 
 import os
 import configparser
@@ -516,7 +515,8 @@ def updateMaxGuesses(*args):
     log("Max guesses set to "+config.get('VARS', 'maxguesses')+".")
     errortxt.see(tk.END)
 
-
+def quitProgram(*args):
+    raise SystemExit
 
 
 
@@ -554,7 +554,7 @@ guessList.config(height=27, width=16, relief='flat')
 
 quitButton = tk.Button(uframe)
 quitButton.place(relx=.99, rely=.02, relwidth=.05, relheight=.08, anchor='ne')
-quitButton.config(text="X", font="Arial 16", relief='raised', command=sys.exit, cursor='hand2', background="#aa0000", activebackground="#880000", activeforeground="#ffffff", foreground="#ffffff")
+quitButton.config(text="X", font="Arial 16", relief='raised', command=quitProgram, cursor='hand2', background="#aa0000", activebackground="#880000", activeforeground="#ffffff", foreground="#ffffff")
 
 hardModeButton = tk.Button(uframe)
 hardModeButton.place(relx=.1, rely=.5, relwidth=.18, anchor='center')

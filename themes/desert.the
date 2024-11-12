@@ -2,25 +2,24 @@
 --- general: foreground, background, active background (buttons)
 
 0f0f00
-c3b35f
-a3933f
+a3935f
+93835f
 
 --- guess list: correct, almost correct, incorrect
 
 
 00aa00
 ded71e
-
-b3a34f
+93834f
 
 --- console: foreground, background
 
 0f0f00
-f0f0a0
+c0c090
 
 --- keyboard: default text color, correct, almost correct, incorrect, background
 
-c0c060
+b09040
 00ff00
 ffff00
 555535

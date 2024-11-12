@@ -1,15 +1,12 @@
-# https://www.youtube.com/watch?v=epDKamC-V-8
-# https://www.youtube.com/watch?v=X5yyKZpZ4vU&list=PL-osiE80TeTsllUYGWPRStXSSKwonuvei&index=2
-
 import tkinter as tk
 from tkinter import ttk
 import random
 import math
+import sys
 
 import os
 import configparser
 from colors import makeDisabledColor
-# from colors import addToHex
 
 ################
 # config setup #
@@ -524,8 +521,6 @@ def updateMaxGuesses(*args):
 
 
 
-
-
 ########
 # root #
 ########
@@ -557,13 +552,9 @@ guessList.tag_add('def', '1.0', tk.END)
 guessList['state'] = 'disabled'
 guessList.config(height=27, width=16, relief='flat')
 
-# quitButton = tk.Button(uframe)
-# quitButton.place(relx=.9, rely=.1, relwidth=.18, anchor='center')
-# quitButton.config(text="Quit", font="Consolas 16 bold", relief='raised', command=quit, cursor='hand2')
-
 quitButton = tk.Button(uframe)
 quitButton.place(relx=.99, rely=.02, relwidth=.05, relheight=.08, anchor='ne')
-quitButton.config(text="X", font="Arial 16", relief='raised', command=quit, cursor='hand2', background="#aa0000", activebackground="#880000", activeforeground="#ffffff", foreground="#ffffff")
+quitButton.config(text="X", font="Arial 16", relief='raised', command=sys.exit, cursor='hand2', background="#aa0000", activebackground="#880000", activeforeground="#ffffff", foreground="#ffffff")
 
 hardModeButton = tk.Button(uframe)
 hardModeButton.place(relx=.1, rely=.5, relwidth=.18, anchor='center')

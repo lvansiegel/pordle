@@ -7,6 +7,7 @@
 - includes themes!
 
 # instructions
+- it is recommended to turn DPI scaling off. the window will adapt to the screen size.
 - run pordle.exe. it requires the words and _internal folders to be present to run correctly. if they are not, redownload the latest release [here](https://github.com/lvansiegel/pordle/releases/latest)
 - your goal is to guess a randomly-chosen word.
 - enter a 5-letter word. if it is in the dictionary, it will indicate which letters of your guess are in the correct position (green) or in the answer but not in the correct position (yellow).

@@ -21,28 +21,28 @@ def configInit():
                           "maxguesses":6,
                           "hardmode":False,
                           "theme":"default.the"}
-        config['COLORS'] = {"bg":"#000000",
-                            "buttonBg":"#f0f0f0",
-                            "activeBg":"#ececec",
-                            "disabledBg":"030303",
-                            "fg":"#00aa00",
-                            "buttonFg":"#edcd33",
-                            "activeFg":"#aaaaaa",
-                            "disabledFg":"#aa0000",
-                            "guessListCorrect":"#c0c0c0",
-                            "guessListAlcorrect":"#ffffff",
-                            "guessListIncorrect":"#00ff00",
-                            "logFg":"#ffff00",
-                            "logBg":"#555555",
-                            "keyboardDefault":"#000000",
-                            "keyboardCorrect":"#f0f0f0",
-                            "keyboardAlcorrect":"#ececec",
-                            "keyboardIncorrect":"#00aa00",
-                            "keyboardBg":"#00aa00",
-                            "entryBg":"#edcd33",
-                            "entryFg":"#aaaaaa",
-                            "entryDisabledBg":"#aa0000",
-                            "entryDisabledFg":"#c0c0c0"}
+        config['COLORS'] = {"bg":"#f0f0f0",
+                            "buttonBg":"#c0c0c0",
+                            "activeBg":"#909090",
+                            "disabledBg":"868686",
+                            "fg":"#000000",
+                            "buttonFg":"#000000",
+                            "activeFg":"#000000",
+                            "disabledFg":"#505050",
+                            "guessListCorrect":"#00aa00",
+                            "guessListAlcorrect":"#edcd33",
+                            "guessListIncorrect":"#aaaaaa",
+                            "logFg":"#aa0000",
+                            "logBg":"#c0c0c0",
+                            "keyboardDefault":"#ffffff",
+                            "keyboardCorrect":"#00ff00",
+                            "keyboardAlcorrect":"#ffff00",
+                            "keyboardIncorrect":"#555555",
+                            "keyboardBg":"#000000",
+                            "entryBg":"#e0e0e0",
+                            "entryFg":"#000000",
+                            "entryDisabledBg":"#d0d0d0",
+                            "entryDisabledFg":"#707070"}
         with open('config.ini', 'w') as configfile:
             config.write(configfile)
     try:
@@ -56,28 +56,28 @@ def configInit():
                           "maxguesses":6,
                           "hardmode":False,
                           "theme":"default"}
-        config['COLORS'] = {"bg":"#000000",
-                            "buttonBg":"#f0f0f0",
-                            "activeBg":"#ececec",
-                            "disabledBg":"030303",
-                            "fg":"#00aa00",
-                            "buttonFg":"#edcd33",
-                            "activeFg":"#aaaaaa",
-                            "disabledFg":"#aa0000",
-                            "guessListCorrect":"#c0c0c0",
-                            "guessListAlcorrect":"#ffffff",
-                            "guessListIncorrect":"#00ff00",
-                            "logFg":"#ffff00",
-                            "logBg":"#555555",
-                            "keyboardDefault":"#000000",
-                            "keyboardCorrect":"#f0f0f0",
-                            "keyboardAlcorrect":"#ececec",
-                            "keyboardIncorrect":"#00aa00",
-                            "keyboardBg":"#00aa00",
-                            "entryBg":"#edcd33",
-                            "entryFg":"#aaaaaa",
-                            "entryDisabledBg":"#aa0000",
-                            "entryDisabledFg":"#c0c0c0"}
+        config['COLORS'] = {"bg":"#f0f0f0",
+                            "buttonBg":"#c0c0c0",
+                            "activeBg":"#909090",
+                            "disabledBg":"868686",
+                            "fg":"#000000",
+                            "buttonFg":"#000000",
+                            "activeFg":"#000000",
+                            "disabledFg":"#505050",
+                            "guessListCorrect":"#00aa00",
+                            "guessListAlcorrect":"#edcd33",
+                            "guessListIncorrect":"#aaaaaa",
+                            "logFg":"#aa0000",
+                            "logBg":"#c0c0c0",
+                            "keyboardDefault":"#ffffff",
+                            "keyboardCorrect":"#00ff00",
+                            "keyboardAlcorrect":"#ffff00",
+                            "keyboardIncorrect":"#555555",
+                            "keyboardBg":"#000000",
+                            "entryBg":"#e0e0e0",
+                            "entryFg":"#000000",
+                            "entryDisabledBg":"#d0d0d0",
+                            "entryDisabledFg":"#707070"}
         with open('config.ini', 'w') as configfile:
             config.write(configfile)
 
@@ -138,7 +138,7 @@ if not os.path.exists('./themes/'):
     print("No themes directory found. Creating...")
     os.makedirs(os.curdir+'\\themes')
     f = open(os.path.realpath(os.curdir)+'\\themes\\default.the', 'w+')
-    f.write("the parser will interpret every line that is not a single hex code as a comment\nin order, theme files have the following colors:\ngeneral: foreground, background, active background (buttons)\n\n000000\nf0f0f0\nececec\n\nguess list: correct, almost correct, incorrect\n\n00aa00\nedcd33\naaaaaa\n\nconsole: foreground, background\n\naa0000\nc0c0c0\n\nkeyboard: default text color, correct, almost correct, incorrect, background\n\nffffff\n00ff00\nffff00\n555555\n#000000\n(colors can either start with a # or not)")
+    f.write("the parser will interpret every line that is not a single hex code as a comment (either including a # or not)\nin order, theme files have the following colors:\n\nbackground\nf0f0f0\nforeground\n000000\n\nbuttons:\nbackground\nc0c0c0\nactive background\n909090\ndisabled background\n868686\n\nforeground\n000000\nactive foreground\n000000\ndisabled foreground\n505050\n\nguess list:\ncorrect\n00aa00\nalmost correct\nedcd33\nincorrect\naaaaaa\n\nconsole:\nbackground\nc0c0c0\nforeground\naa0000\n\nkeyboard:\nbackground\n000000\ndefault\nffffff\ncorrect\n00ff00\nalmost correct\nffff00\nincorrect\n555555\n\nentry:\nbackground\ne0e0e0\nforeground\n000000\ndisabled background\nd0d0d0\ndisabled foreground\n707070")
 
     config.set('VARS', 'theme', 'default.the')
     with open('config.ini', 'w') as configfile:

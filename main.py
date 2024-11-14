@@ -620,7 +620,7 @@ uframe.columnconfigure(2, weight=1)
 uframe.rowconfigure(1, weight=1)
 
 guessList = tk.Text(uframe)
-guessList.place(relx=.5, rely=.5, relwidth=.7, anchor='center')
+guessList.place(relx=.5, rely=.02, relwidth=.7, relheight=.97, anchor='n')
 #tags
 guessList.tag_config('def', font=("Consolas", fm["guesslist"]), justify="center")
 guessList.tag_add('def', '1.0', tk.END)
@@ -659,6 +659,7 @@ maxGuessesButton.place(relx=.065, rely=.6, relwidth=.11, relheight= .09, anchor=
 maxGuessesButton.config(text="Set max\nguesses", font="Consolas {} bold".format(fm['mgbutton']), relief='raised', command=updateMaxGuesses, cursor='hand2')
 mgv = tk.IntVar()
 nl = [i for i in range(1,21)]
+nl.reverse()
 maxGuessesDropdown = ttk.Combobox(uframe, values=nl, state='readonly')
 maxGuessesDropdown.set(config.get('VARS', 'maxguesses'))
 maxGuessesDropdown.place(relx=.16, rely=.6, relwidth=.06, relheight= .09, anchor='center')

@@ -20,7 +20,8 @@ def configInit():
         config['VARS'] = {"wordsize":5,
                           "maxguesses":6,
                           "hardmode":False,
-                          "theme":"default.the"}
+                          "theme":"default.the",
+                          "changetextscaling":0}
         config['COLORS'] = {"bg":"#f0f0f0",
                             "buttonBg":"#c0c0c0",
                             "activeBg":"#909090",
@@ -55,7 +56,8 @@ def configInit():
         config['VARS'] = {"wordsize":5,
                           "maxguesses":6,
                           "hardmode":False,
-                          "theme":"default"}
+                          "theme":"default.the",
+                          "changetextscaling":0}
         config['COLORS'] = {"bg":"#f0f0f0",
                             "buttonBg":"#c0c0c0",
                             "activeBg":"#909090",
@@ -98,12 +100,21 @@ root.geometry(str(sh)+"x"+str(sw)+"+"+sposx+"+"+sposy)
 root.config(padx=3,pady=3)
 root.resizable(0,0)
 
-fm = {'guesslist': 32,
-      'button': 16,
-      'dropdown': 12,
-      'mgbutton': 10,
-      'keyboard': 16}
+expectedScreenWidth = 1536
+textFactor = (expectedScreenWidth/screenWidth)
 
+if config.getboolean('VARS', 'changetextscaling'):
+    fm = {'guesslist': 32,
+        'button': 16,
+        'dropdown': 12,
+        'mgbutton': 10,
+        'keyboard': 16}
+else:
+    fm = {'guesslist': round(32/textFactor),
+      'button': round(16/textFactor),
+      'dropdown': round(12/textFactor),
+      'mgbutton': round(10/textFactor),
+      'keyboard': round(16/textFactor)}
 
 ########
 # vars #
